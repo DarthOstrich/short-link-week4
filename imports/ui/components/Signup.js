@@ -11,16 +11,24 @@ class Signup extends Component {
     }
   }
   handleSubmit(e) {
-    const email = this.refs.email.value.trim();
-    const password = this.refs.password.value.trim();
     e.preventDefault();
 
+    const email = this.refs.email.value.trim();
+    const password = this.refs.password.value.trim();
+
+    if (password.length < 9) {
+      return this.setState({ error: 'Password must be more than 8 characters long.' })
+
+    }
+
     Accounts.createUser({email, password}, (err) => {
-      console.log('signup callback', err);
-      if (error) {
+      // console.log('signup callback', err);
+      if (err) {
         this.setState({
           error: err.reason
         })
+      } else {
+        this.setState({ error: '' })
       }
     });
   }
@@ -28,8 +36,8 @@ class Signup extends Component {
     return(
       <div>
         <h1>Signup</h1>
-        {this.state.error ? <p>{this.state.error}</p> : undefined}
-        <form onSubmit={this.handleSubmit.bind(this)}>
+        { this.state.error ? <p>{this.state.error}</p> : undefined }
+        <form onSubmit={this.handleSubmit.bind(this)} noValidate>
           <input type="email" ref="email" placeholder="Email" />
           <input type="password" ref="password" placeholder="Password" />
           <button type="submit">Create Account</button>

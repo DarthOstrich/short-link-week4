@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Link } from 'react-router';
-import { Accounts } from 'meteor/accounts-base';
+// import { Accounts } from 'meteor/accounts-base';
 
 class Login extends Component {
   constructor(props){
@@ -17,11 +17,13 @@ class Login extends Component {
     e.preventDefault();
 
     Meteor.loginWithPassword({email}, password, (err) => {
-      console.log('signup callback', err);
+      // console.log('login callback', err);
       if (err) {
         this.setState({
-          error: err.reason
-        })
+          error: 'Unable to login. Check email and password'
+        });
+      } else {
+        this.setState({ error: '' })
       }
     });
   }
@@ -30,7 +32,7 @@ class Login extends Component {
       <div>
         <h1>Login</h1>
         {this.state.error ? <p>{this.state.error}</p> : undefined}
-        <form onSubmit={this.handleSubmit.bind(this)}>
+        <form onSubmit={this.handleSubmit.bind(this)} noValidate>
           <input type="email" ref="email" placeholder="Email" />
           <input type="password" ref="password" placeholder="Password" />
           <button type="submit">Login</button>
